@@ -1,0 +1,5 @@
+web
+.idea
+.yarn
+frontend/node_modules
+plugins/node_modules

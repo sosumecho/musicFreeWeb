@@ -1,0 +1,33 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.7.8",
+    "cheerio": "^1.0.0",
+    "compare-versions": "^6.1.1",
+    "crypto-js": "^4.2.0",
+    "dayjs": "^1.11.13",
+    "he": "^1.2.0",
+    "jschardet": "^3.1.4",
+    "music-metadata": "^10.6.1",
+    "nanoid": "^5.0.9",
+    "qs": "^6.13.1",
+    "rimraf": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/big-integer": "^0.0.35",
+    "@types/crypto-js": "^4.2.2",
+    "@types/he": "^1.2.3",
+    "@types/node": "^22.10.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
+}
