@@ -1,29 +1,42 @@
-#FROM node:18.18.0-alpine as frontend
-#WORKDIR /app
-#COPY frontend/* ./
-#RUN yarn && yarn build
-
-FROM golang:1.23 as builder
+FROM --platform=$BUILDPLATFORM golang:1.23 as builder
 
 WORKDIR /go/src
 
+COPY server/go.mod server/go.sum ./
 
-COPY server/main.go server/go.mod server/go.sum ./
+RUN go mod download
 
-RUN go mod tidy
+COPY server/ .
 
-RUN ls -al
+ARG TARGETOS
+ARG TARGETARCH
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o bin/server -ldflags "-s -w" -trimpath main.go
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o bin/server -ldflags "-s -w" -trimpath main.go
+
+
+FROM node:23.1.0-alpine as frontend
+WORKDIR /app
+COPY frontend/package.json frontend/yarn.lock ./
+RUN yarn
+COPY frontend/ .
+RUN yarn build
+
+
+
+FROM node:23.1.0-alpine as plugin
+WORKDIR /app
+
+COPY plugin/package.json plugin/yarn.lock ./
+RUN  yarn
+COPY plugin/ .
+RUN yarn build
 
 FROM node:23.1.0-alpine
 WORKDIR /app
-COPY --from=builder /go/src/bin/server /app/server
-COPY plugin/src ./plugin/src
-COPY plugin/package.json plugin/yarn.lock ./plugin/
-RUN cd plugin && yarn
-RUN mkdir -p ./plugin/plugins
-COPY server/web ./web/
+COPY --from=builder /go/src/bin/server ./server
+COPY --from=frontend /app/build ./web
+COPY --from=plugin /app/dist ./plugin/dist
+COPY --from=plugin /app/plugins ./plugin/plugins
 
 EXPOSE 18888
 

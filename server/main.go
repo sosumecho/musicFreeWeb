@@ -2,15 +2,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 func cmd(typ string, args ...string) ([]byte, error) {
-	command := exec.Command("node", append([]string{"src/index.js", typ}, args...)...)
+	command := exec.Command("node", append([]string{"dist/index.js", typ}, args...)...)
 	command.Dir = "./plugin"
 	return command.CombinedOutput()
 }

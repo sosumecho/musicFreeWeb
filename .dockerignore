@@ -1,0 +1,12 @@
+frontend/.yarn
+frontend/build
+frontend/node_modules
+
+plugin/.yarn
+plugin/node_modules
+plugin/dist
+plugin/plugins/*
+!plugin/plugins/
+
+server/bin
+server/web
